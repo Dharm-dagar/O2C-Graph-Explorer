@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Database (regenerate with load_data.py)
+backend/o2c.db
+
+# Secrets
+backend/.env
+.env
+
+# Node
+frontend/node_modules/
+
+# Build output (regenerate with npm run build)
+# Keep dist/ in repo so it runs without Node.js
+# frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Raw dataset zip (keep sap-o2c-data/ folder)
+sap-order-to-cash-dataset.zip
