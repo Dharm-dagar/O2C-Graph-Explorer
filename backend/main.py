@@ -11,7 +11,11 @@ from pydantic import BaseModel
 from groq import Groq
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "o2c.db")
-FRONTEND_BUILD = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+# FRONTEND_BUILD = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+FRONTEND_BUILD = os.path.join(BASE_DIR, "frontend", "dist")
 
 # ── .env loader ───────────────────────────────────────────────────────────────
 def _load_dotenv():
@@ -594,7 +598,11 @@ if os.path.exists(FRONTEND_BUILD):
 
     @app.get("/{full_path:path}")
     def serve_spa(full_path: str):
-        fp = os.path.join(FRONTEND_BUILD, full_path)
-        if os.path.exists(fp):
-            return FileResponse(fp)
+        file_path = os.path.join(FRONTEND_BUILD, full_path)
+        if os.path.exists(file_path):
+            return FileResponse(file_path)
         return FileResponse(os.path.join(FRONTEND_BUILD, "index.html"))
+else:
+    @app.get("/")
+    def root_fallback():
+        return {"message": "Frontend not built. Please run npm run build."}
