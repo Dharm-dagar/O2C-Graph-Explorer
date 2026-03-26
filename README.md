@@ -96,7 +96,7 @@ The system prompt instructs Claude to respond with a fixed rejection message for
 
 ```bash
 cp backend/.env.example backend/.env
-# Edit backend/.env and add your ANTHROPIC_API_KEY
+# Edit backend/.env and add your GROQ_API_KEY
 ```
 
 ### 2. Load Data
