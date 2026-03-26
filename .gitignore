@@ -6,7 +6,7 @@ __pycache__/
 venv/
 
 # Database (regenerate with load_data.py)
-backend/o2c.db
+# backend/o2c.db
 
 # Secrets
 backend/.env
