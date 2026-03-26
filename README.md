@@ -2,7 +2,7 @@
 
 A context graph system with LLM-powered query interface for exploring SAP Order-to-Cash process data.
 
-![Graph Explorer Screenshot](docs/screenshot.png)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/61f3bf3c-0adc-4ab1-9217-ea1c1a84cfc7" />
 
 ## Architecture
 
