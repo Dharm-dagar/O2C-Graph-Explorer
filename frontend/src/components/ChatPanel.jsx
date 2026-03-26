@@ -2,10 +2,11 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 
 const SUGGESTIONS = [
   'Which products have the highest number of billing documents?',
-  'Trace the full flow of billing document 91150187',
-  'Find sales orders delivered but not billed',
-  'What is the total revenue by customer?',
-  'Show incomplete O2C flows (missing billing or delivery)',
+  'Trace the full O2C flow of billing document 91150187',
+  'Show top 5 customers by total revenue',
+  'Find sales orders that have no delivery at all',
+  'List all cancelled billing documents',
+  'Which plants handle the most deliveries?',
 ]
 
 const INITIAL_MESSAGE = {
