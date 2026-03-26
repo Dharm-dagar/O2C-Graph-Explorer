@@ -331,6 +331,29 @@ RULES:
 - For product names use: JOIN product_descriptions pd ON pd.product = <table>.material AND pd.language = 'EN'
 - LIMIT results to 20 rows unless the question asks for all
 - Only SELECT statements — never INSERT/UPDATE/DELETE
+
+FEW-SHOT EXAMPLES (follow these patterns exactly):
+
+Q: Which products have the highest number of billing documents?
+A: SELECT pd.productDescription, COUNT(DISTINCT bdi.billingDocument) AS num_billing_docs FROM billing_document_items bdi JOIN product_descriptions pd ON pd.product = bdi.material AND pd.language = 'EN' GROUP BY bdi.material ORDER BY num_billing_docs DESC LIMIT 10;
+
+Q: Trace the full O2C flow of billing document 91150187
+A: SELECT soh.salesOrder, odi.deliveryDocument, bdi.billingDocument, bdh.accountingDocument AS journalEntry FROM billing_document_items bdi JOIN outbound_delivery_headers odi ON odi.deliveryDocument = bdi.referenceSdDocument JOIN outbound_delivery_items odi2 ON odi2.deliveryDocument = odi.deliveryDocument JOIN sales_order_headers soh ON soh.salesOrder = odi2.referenceSdDocument JOIN billing_document_headers bdh ON bdh.billingDocument = bdi.billingDocument WHERE bdi.billingDocument = '91150187' LIMIT 1;
+
+Q: Show top 5 customers by total revenue
+A: SELECT bp.businessPartnerFullName, COUNT(DISTINCT bdh.billingDocument) AS total_bills, ROUND(SUM(bdh.totalNetAmount), 2) AS total_revenue, bdh.transactionCurrency FROM billing_document_headers bdh JOIN business_partners bp ON bp.customer = bdh.soldToParty GROUP BY bdh.soldToParty ORDER BY total_revenue DESC LIMIT 5;
+
+Q: Find sales orders that have no delivery at all
+A: SELECT soh.salesOrder, soh.totalNetAmount, soh.transactionCurrency, soh.creationDate FROM sales_order_headers soh WHERE NOT EXISTS (SELECT 1 FROM outbound_delivery_items odi WHERE odi.referenceSdDocument = soh.salesOrder) LIMIT 20;
+
+Q: List all cancelled billing documents
+A: SELECT bdc.billingDocument, bdc.cancelledBillingDocument, bdc.billingDocumentType, bdc.creationDate FROM billing_document_cancellations bdc ORDER BY bdc.creationDate DESC LIMIT 20;
+
+Q: Which plants handle the most deliveries?
+A: SELECT p.plantName, p.cityName, COUNT(DISTINCT odi.deliveryDocument) AS delivery_count FROM outbound_delivery_items odi JOIN plants p ON p.plant = odi.plant GROUP BY odi.plant ORDER BY delivery_count DESC LIMIT 10;
+
+Q: Find sales orders delivered but not billed
+A: SELECT soh.salesOrder, soh.totalNetAmount, soh.transactionCurrency FROM sales_order_headers soh WHERE soh.overallDeliveryStatus = 'C' AND (soh.overallOrdReltdBillgStatus IS NULL OR soh.overallOrdReltdBillgStatus = '') LIMIT 20;
 """
 
 SYSTEM_PROMPT = f"""You are a data analyst assistant for an SAP Order-to-Cash (O2C) system.
